@@ -8,7 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    let emojiArray = ["🐵", "🙈", "🙉", "🙊", "🐒", "🐗", "🐷", "🪿", "🪰", "🦄", "🐍", "🪲","🪲", "🙈"]
+    let emojis1 = ["🐵", "🙈", "🙉", "🙊", "🐒","🐵", "🙈", "🙉", "🙊", "🐒"]
+    let emojis2 = ["🐒", "🐗", "🐷", "🪿", "🪰", "🦄","🐒", "🐗", "🐷", "🪿", "🪰", "🦄"]
+    let emojis3 = ["🐍", "🪲","🦭", "🦧","🐍", "🪲","🦭", "🦧"]
+    @State var emojis = []
+    @State var numberOfCards = 10
+    @State var themeColor:Color = .blue
+    
     var body: some View {
         VStack{
             Text("Memo").font(.largeTitle)
@@ -16,7 +22,8 @@ struct ContentView: View {
              ScrollView {
                  cardDisplay
              }
-            Text("to ja 🤡")
+                selector
+
 //            HStack{
 //                cardAdder
 //                Spacer()
@@ -24,8 +31,42 @@ struct ContentView: View {
 //            }
 //            .padding(.horizontal, 20)
         }
+        .padding()
     }
     
+    var selector: some View {
+        HStack {
+            ThemeButton(color: $themeColor, icon: "smiley", text: "Motyw 1")
+                .onTapGesture(perform: {
+                    changer(theme:"motyw1")
+                })
+            Spacer()
+            ThemeButton(color: $themeColor, icon: "shuffle", text: "Motyw 2")
+                .onTapGesture(perform: {
+                    changer(theme:"motyw2")
+                })
+            Spacer()
+            ThemeButton(color: $themeColor, icon: "pawprint.circle", text: "Motyw 3")
+                .onTapGesture(perform: {
+                    changer(theme:"motyw3")
+                })
+        }
+    }
+    
+    func changer(theme:String){
+        if(theme == "motyw2"){
+            self.themeColor = Color.red
+            emojis = emojis2.shuffled()
+        }
+        else if(theme == "motyw3"){
+            self.themeColor = Color.green
+            emojis = emojis3.shuffled()
+        }
+        else{
+            self.themeColor = Color.blue
+            emojis = emojis1.shuffled()
+        }
+    }
 //    func adjustCardNumber(by offset: Int, symbol: String) -> some View  {
 //        return Button(symbol){
 //            cardCount += offset
@@ -36,11 +77,12 @@ struct ContentView: View {
 //                .frame(width:30, height:20))
 //            .disabled(cardCount < 2 && symbol == "-" || cardCount > emojiArray.count && symbol == "+")
 //    }
+
     
     var cardDisplay: some View {
         LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 10) {
-            ForEach(0..<emojiArray.count, id: \.self) { emoji in
-                CardView(hiddenFlag: true, emoji: emojiArray[emoji]).aspectRatio(2/3, contentMode: .fit)
+            ForEach(0..<emojis.count, id: \.self) { emoji in
+                CardView(hiddenFlag: true, emoji: emojis[emoji] as! String, color: themeColor)
             }
         }
         .foregroundColor(.blue)

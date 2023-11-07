@@ -11,16 +11,18 @@ import SwiftUI
 
 struct CardView: View {
     @State var hiddenFlag: Bool = false
-    @State var emoji: String
+    var emoji: String
+    var color: Color
     var body: some View {
         ZStack{
             Group{
                 RoundedRectangle(cornerRadius: 12)
-                .stroke(Color.blue, lineWidth: 2)
+                .stroke(color, lineWidth: 2)
                 Text(emoji).font(.largeTitle)
                 RoundedRectangle(cornerRadius: 12)
-                .fill(Color.blue)
+                .fill(color)
                 .opacity(hiddenFlag ? 0 : 1)
+                .aspectRatio(2/3, contentMode: .fit)
             }
             .onTapGesture {
                 self.hiddenFlag = !self.hiddenFlag
